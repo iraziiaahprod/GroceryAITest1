@@ -121,10 +121,26 @@ df = pd.DataFrame(all_columns)
 # Convert all column names to lowercase to match PostgreSQL conventions
 df.columns = df.columns.str.lower()
 
-# Drop complex 'department' column (use 'legacydepartment' instead)
-if 'department' in df.columns:
-    df = df.drop(columns=['department'])
-    print("✓ Dropped complex 'department' column (using 'legacydepartment' instead)")
+# Define the columns we want to keep (original columns before department was added)
+# This makes the code resilient to new API fields being added in the future
+columns_to_keep = [
+    '_id',
+    'name',
+    'storeid',
+    'price',
+    'originalprice',
+    'quantityavailable',
+    'bestbeforedate',
+    'imagegallery',
+    'intime',
+    'scraper_timestamp'
+]
+
+# Filter to only keep columns that exist in both our list and the DataFrame
+existing_columns = [col for col in columns_to_keep if col in df.columns]
+df = df[existing_columns]
+
+print(f"\n✓ Keeping {len(existing_columns)} columns: {existing_columns}")
 
 print("\nDataFrame Info:")
 print(df.info())
