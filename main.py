@@ -102,15 +102,17 @@ if not stores:
 # Create a list to store all products
 all_columns = []
 
-# Get current timestamp
-current_timestamp = pd.Timestamp.today()
+# Get current timestamp in Eastern Time
+current_timestamp = pd.Timestamp.now(tz='America/Toronto')
+print(f"Scraping timestamp (Eastern): {current_timestamp}")
 
 # Loop through the nested fields in json file
 for storeIDs, products in stores.items():
     if isinstance(products, list):
         for product in products:
             # Add timestamp to each product (lowercase to match Supabase column naming)
-            product['scraper_timestamp'] = current_timestamp
+            # Convert to ISO format string to preserve timezone
+            product['scraper_timestamp'] = current_timestamp.isoformat()
             all_columns.append(product)
     else:
         print(f"⚠ Warning: Products for store {storeIDs} is not a list")
@@ -162,12 +164,7 @@ if df.empty:
 # Data type conversions and cleaning
 print("\nProcessing data...")
 
-# Convert scraper_timestamp to ISO format string if it exists
-if 'scraper_timestamp' in df.columns:
-    df['scraper_timestamp'] = pd.to_datetime(df['scraper_timestamp']).dt.strftime('%Y-%m-%dT%H:%M:%S.%fZ')
-else:
-    print("⚠ Warning: scraper_timestamp column not found in data")
-    print(f"Available columns: {df.columns.tolist()}")
+# scraper_timestamp is already in ISO format string from above, no conversion needed
 
 # Safe type conversions with error handling
 if 'originalprice' in df.columns:
