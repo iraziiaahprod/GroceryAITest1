@@ -43,4 +43,8 @@ env/
 venv/
 ENV/
 env.bak/
-venv.bak/
+venv.bak/.idea/
+*.pyc
+__pycache__/
+.env
+venv/
