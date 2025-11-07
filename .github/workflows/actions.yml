@@ -2,9 +2,9 @@ name: run main.py
 
 on:
   schedule:
-    - cron: '0 9 * * *'    # 9:00 AM UTC
-    - cron: '30 11 * * *'  # 11:30 AM UTC
-    - cron: '30 17 * * *'  # 5:30 PM UTC
+    - cron: '0 14 * * *'   # 9:00 AM EST (2:00 PM UTC)
+    - cron: '30 16 * * *'  # 11:30 AM EST (4:30 PM UTC)
+    - cron: '30 22 * * *'  # 5:30 PM EST (10:30 PM UTC)
   workflow_dispatch:  # Allows manual trigger
 
 jobs:
