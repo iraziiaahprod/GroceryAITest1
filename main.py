@@ -121,6 +121,11 @@ df = pd.DataFrame(all_columns)
 # Convert all column names to lowercase to match PostgreSQL conventions
 df.columns = df.columns.str.lower()
 
+# Drop complex 'department' column (use 'legacydepartment' instead)
+if 'department' in df.columns:
+    df = df.drop(columns=['department'])
+    print("✓ Dropped complex 'department' column (using 'legacydepartment' instead)")
+
 print("\nDataFrame Info:")
 print(df.info())
 print(f"\nTotal products found: {len(df)}")
