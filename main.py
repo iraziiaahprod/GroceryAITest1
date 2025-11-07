@@ -121,10 +121,15 @@ df = pd.DataFrame(all_columns)
 # Convert all column names to lowercase to match PostgreSQL conventions
 df.columns = df.columns.str.lower()
 
-# Define the columns we want to keep (original columns before department was added)
+# Rename _id to id if it exists (API uses _id, but our table uses id)
+if '_id' in df.columns:
+    df = df.rename(columns={'_id': 'id'})
+    print("✓ Renamed '_id' column to 'id'")
+
+# Define the columns we want to keep (matching Supabase table schema)
 # This makes the code resilient to new API fields being added in the future
 columns_to_keep = [
-    '_id',
+    'id',
     'name',
     'storeid',
     'price',
@@ -133,6 +138,9 @@ columns_to_keep = [
     'bestbeforedate',
     'imagegallery',
     'intime',
+    'imageurl',
+    'issnapeligible',
+    'storagetreatment',
     'scraper_timestamp'
 ]
 
